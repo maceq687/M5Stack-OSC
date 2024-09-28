@@ -1,6 +1,10 @@
 # M5Stack-OSC
 Sending OSC data from M5StickCPlus2 over local network
 
+### Structure
+
+Projects have Arduino IDE sketches structure
+
 ### Prerequisities
 To make a project work you will need to create `wifi_config.h` file in this projects folder.  
 The file must have the following structure:
@@ -23,3 +27,9 @@ The following data is transmitted:
  - `/gyroX` `/gyroY` `/gyroZ` - gyroscope data  
  - `/accX` `/accY` `/accZ` - accelerometer data  
  - `/pitch` `/roll` `/yaw` - attitude and heading reference system (AHRS) data - keep in mind that the MPU6886 IMU does not have geomagnetic sensor
+
+
+## Dependencies
+
+ - [M5StickCPlus2 library (M5Stack)](https://github.com/m5stack/M5StickCPlus2)
+ - [OSC library (Adrian Freed)](https://github.com/CNMAT/OSC)
