@@ -27,7 +27,7 @@ const unsigned int outPort = 8000;  // <----- receiving device in port
 WiFiUDP udp;
 
 // Network port for incoming messages
-const unsigned int localPort = 8000; // This is not strictly needed for sending messages
+const unsigned int inPort = 8000; // This is not strictly needed for sending messages
 
 // Variables for storing the different bits of IMU data
 float accX = 0.f;
@@ -111,10 +111,8 @@ void setup()
   StickCP2.begin(cfg);
 
   // Connect to WiFi network
-  while (!connectToWiFi())
-  {
-  }
-  udp.begin(localPort);
+  connectToWiFi();
+  udp.begin(inPort);
 
   delay(1000);
   StickCP2.Display.fillScreen(BLACK);
@@ -125,7 +123,7 @@ void setup()
   StickCP2.Display.setTextSize(1);
 
   StickCP2.Display.setCursor(80, 15);
-  StickCP2.Display.println("IMU TEST");
+  StickCP2.Display.println("SEND GYRO");
 
   StickCP2.Display.setCursor(30, 30);
   StickCP2.Display.println("  X       Y       Z");
