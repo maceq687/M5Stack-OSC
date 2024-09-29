@@ -237,7 +237,7 @@ void MahonyAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay,
     // Calculate angles from quaternions
     *pitch = asinf(2.0f * (q0*q2 - q1*q3));
     *roll = atan2f(2.0f * (q0*q1 + q2*q3), 1.0f - 2.0f * (q1*q1 + q2*q2));
-	  *yaw = atan2f(2.0f * (q1*q2 + q0*q3), q0*q0 + q1*q1 - q2*q2 - q3*q3);
+    *yaw = atan2f(2.0f * (q1*q2 + q0*q3), 1.0f - 2.0f * (q2*q2 + q3*q3));
 
     // Convert radians to degrees
     *pitch *= RAD_TO_DEG;
