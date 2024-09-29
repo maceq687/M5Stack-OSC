@@ -16,6 +16,7 @@
 #include <OSCMessage.h>
 
 #include "wifi_config.h"
+#include "MahonyAHRS.h"
 
 // WiFi setup
 const char *ssid = SSID;            // <----- your WiFi network's name
@@ -154,12 +155,14 @@ void loop()
     gyroZ = data.gyro.z; // gyro z-axis value.
     // data.gyro.value;  // gyro 3values array [0]=x / [1]=y / [2]=z.
 
-    pitch = data.mag.x;  // mag x-axis value.
-    roll = data.mag.y;   // mag y-axis value.
-    yaw = data.mag.z;    // mag z-axis value.
+    // pitch = data.mag.x;  // mag x-axis value.
+    // roll = data.mag.y;   // mag y-axis value.
+    // yaw = data.mag.z;    // mag z-axis value.
     // data.mag.value;   // mag 3values array [0]=x / [1]=y / [2]=z.
 
     // data.value;       // all sensor 9values array [0~2]=accel / [3~5]=gyro / [6~8]=mag
+
+    MahonyAHRSupdateIMU(gyroX * DEG_TO_RAD, gyroY * DEG_TO_RAD, gyroZ * DEG_TO_RAD, accX, accY, accZ, &pitch, &roll, &yaw);
   }
 
   // 2. PRINT DATA TO M5 LCD (optional)
