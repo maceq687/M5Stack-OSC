@@ -162,7 +162,8 @@ void loop()
 
     // data.value;       // all sensor 9values array [0~2]=accel / [3~5]=gyro / [6~8]=mag
 
-    MahonyAHRSupdateIMU(gyroX * DEG_TO_RAD, gyroY * DEG_TO_RAD, gyroZ * DEG_TO_RAD, accX, accY, accZ, &pitch, &roll, &yaw);
+    // Calculate pitch, roll and yaw based on accelerometer and gyroscope readings using Mahony's AHRS algorithm
+    MahonyAHRSupdateIMU(gyroX, gyroY, gyroZ, accX, accY, accZ, &pitch, &roll, &yaw);
   }
 
   // 2. PRINT DATA TO M5 LCD (optional)

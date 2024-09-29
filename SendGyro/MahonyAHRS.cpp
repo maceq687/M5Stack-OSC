@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------
 // Definitions
 
-#define sampleFreq 25.0f          // sample frequency in Hz
+#define sampleFreq 10.0f          // sample frequency in Hz
 #define twoKpDef   (2.0f * 1.0f)  // 2 * proportional gain
 #define twoKiDef   (2.0f * 0.0f)  // 2 * integral gain
 
@@ -32,17 +32,13 @@
 
 volatile float twoKp = twoKpDef;  // 2 * proportional gain (Kp)
 volatile float twoKi = twoKiDef;  // 2 * integral gain (Ki)
-volatile float
-    q0 = 1.0,
-    q1 = 0.0, q2 = 0.0,
-    q3 = 0.0;  // quaternion of sensor frame relative to auxiliary frame
-volatile float integralFBx = 0.0f, integralFBy = 0.0f,
+volatile float q0 = 1.0,
+               q1 = 0.0,
+               q2 = 0.0,
+               q3 = 0.0;  // quaternion of sensor frame relative to auxiliary frame
+volatile float integralFBx = 0.0f,
+               integralFBy = 0.0f,
                integralFBz = 0.0f;  // integral error terms scaled by Ki
-
-//---------------------------------------------------------------------------------------------------
-// Function declarations
-
-// float invSqrt(float x);
 
 //====================================================================================================
 // Functions
@@ -65,6 +61,11 @@ void MahonyAHRSupdate(float gx, float gy, float gz, float ax, float ay,
         // MahonyAHRSupdateIMU(gx, gy, gz, ax, ay, az);
         return;
     }
+
+    // Convert gyroscope degrees/sec to radians/sec
+    gx *= DEG_TO_RAD;
+    gy *= DEG_TO_RAD;
+    gz *= DEG_TO_RAD;
 
     // Compute feedback only if accelerometer measurement valid (avoids NaN in
     // accelerometer normalisation)
@@ -167,6 +168,11 @@ void MahonyAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay,
     float halfex, halfey, halfez;
     float qa, qb, qc;
 
+    // Convert gyroscope degrees/sec to radians/sec
+    gx *= DEG_TO_RAD;
+    gy *= DEG_TO_RAD;
+    gz *= DEG_TO_RAD;
+
     // Compute feedback only if accelerometer measurement valid (avoids NaN in
     // accelerometer normalisation)
     if (!((ax == 0.0f) && (ay == 0.0f) && (az == 0.0f))) {
@@ -228,19 +234,15 @@ void MahonyAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay,
     q2 *= recipNorm;
     q3 *= recipNorm;
 
-    *pitch = asin(-2 * q1 * q3 + 2 * q0 * q2);  // pitch
-    *roll  = atan2(2 * q2 * q3 + 2 * q0 * q1,
-                  -2 * q1 * q1 - 2 * q2 * q2 + 1);  // roll
-    *yaw   = atan2(2 * (q1 * q2 + q0 * q3),
-                 q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3);  // yaw
+    // Calculate angles from quaternions
+    *pitch = asinf(2.0f * (q0*q2 - q1*q3));
+    *roll = atan2f(2.0f * (q0*q1 + q2*q3), 1.0f - 2.0f * (q1*q1 + q2*q2));
+	  *yaw = atan2f(2.0f * (q1*q2 + q0*q3), q0*q0 + q1*q1 - q2*q2 - q3*q3);
 
+    // Convert radians to degrees
     *pitch *= RAD_TO_DEG;
-    *yaw *= RAD_TO_DEG;
-    // Declination of SparkFun Electronics (40°05'26.6"N 105°11'05.9"W) is
-    // 	8° 30' E  ± 0° 21' (or 8.5°) on 2016-07-19
-    // - http://www.ngdc.noaa.gov/geomag-web/#declination
-    *yaw -= 8.5;
     *roll *= RAD_TO_DEG;
+    *yaw *= RAD_TO_DEG;
 }
 
 //---------------------------------------------------------------------------------------------------
