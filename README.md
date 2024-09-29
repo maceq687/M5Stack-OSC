@@ -26,7 +26,7 @@ Created based on: [Edinburgh-College-of-Art/m5stickc-plus-introduction/.../SendF
 The following data is transmitted:  
  - `/gyroX` `/gyroY` `/gyroZ` - gyroscope data  
  - `/accX` `/accY` `/accZ` - accelerometer data  
- - `/pitch` `/roll` `/yaw` - attitude and heading reference system (AHRS) data - keep in mind that the MPU6886 IMU does not have geomagnetic sensor so those value are calculated using Mahony's AHRS algorithm
+ - `/pitch` `/roll` `/yaw` - attitude and heading reference system (AHRS) data - keep in mind that the MPU6886 IMU does not have geomagnetic sensor so those value are calculated using [Mahony's AHRS algorithm](https://x-io.co.uk/open-source-imu-and-ahrs-algorithms/)
 
 
 ## Dependencies
